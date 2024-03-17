@@ -73,7 +73,7 @@ func UpdateEngineer(e Engineer) error {
 	_, err = db.Exec(`
 		UPDATE engineer 
 		SET first_name = $1, last_name = $2, gender = $3, country_id = $4, title = $5 
-		WHERE id = $ 6`,
+		WHERE id = $6`,
 		e.FirstName, e.LastName, e.Gender, e.ID, e.Title, e.ID,
 	)
 	if err != nil {
