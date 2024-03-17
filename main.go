@@ -49,18 +49,30 @@ func AddEngineer(e Engineer) (int, error) {
 	}
 	defer db.Close()
 
-	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5) RETURNING id`,
-		e.FirstName, e.LastName, e.Gender, e.ID, e.Title,
-	)
+	// result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5) RETURNING id`,
+	// 	e.FirstName, e.LastName, e.Gender, e.ID, e.Title,
+	// )
+	// if err != nil {
+	// 	return 0, err
+	// }
+
+	// insertedId, err := result.LastInsertId()
+	// if err != nil {
+	// 	fmt.Println("Cannot get the inserted id")
+	// }
+	// return int(insertedId), nil
+
+	row := db.QueryRow(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5) RETURNING id`,
+		e.FirstName, e.LastName, e.Gender, e.ID, e.Title)
+
+	var insertedId int
+	err = row.Scan(&insertedId)
 	if err != nil {
+		fmt.Println("Error retrieving inserted ID:", err) // Improve error logging
 		return 0, err
 	}
 
-	insertedId, err := result.LastInsertId()
-	if err != nil {
-		fmt.Println("Cannot get the inserted id")
-	}
-	return int(insertedId), nil
+	return insertedId, nil
 }
 
 func UpdateEngineer(e Engineer) error {
@@ -74,7 +86,7 @@ func UpdateEngineer(e Engineer) error {
 		UPDATE engineer 
 		SET first_name = $1, last_name = $2, gender = $3, country_id = $4, title = $5 
 		WHERE id = $6`,
-		e.FirstName, e.LastName, e.Gender, e.ID, e.Title, e.ID,
+		e.FirstName, e.LastName, e.Gender, e.CountryID, e.Title, e.ID,
 	)
 	if err != nil {
 		return err
