@@ -49,7 +49,7 @@ func AddEngineer(e Engineer) (int, error) {
 	}
 	defer db.Close()
 
-	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5)`,
+	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5) RETURNING id`,
 		e.FirstName, e.LastName, e.Gender, e.ID, e.Title,
 	)
 	if err != nil {
@@ -96,7 +96,7 @@ func exist(id int) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	rows.Close()
+	defer rows.Close()
 
 	existId := -1
 	for rows.Next() {
@@ -124,7 +124,7 @@ func List() ([]Engineer, error) {
 	if err != nil {
 		return nil, err
 	}
-	rows.Close()
+	defer rows.Close()
 
 	for rows.Next() {
 		engineer := Engineer{}
