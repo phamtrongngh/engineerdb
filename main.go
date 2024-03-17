@@ -1,4 +1,4 @@
-package main
+package engineerdb
 
 import (
 	"database/sql"
