@@ -154,7 +154,3 @@ func DeleteEngineer(id int) error {
 
 	return nil
 }
-
-func main() {
-
-}
