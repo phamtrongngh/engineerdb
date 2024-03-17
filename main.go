@@ -47,7 +47,7 @@ func AddEngineer(e Engineer) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	db.Close()
+	defer db.Close()
 
 	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, countr_id, title) VALUES($1, $2, $3, $4, $5)`,
 		e.FirstName, e.LastName, e.Gender, e.ID, e.Title,
@@ -68,7 +68,7 @@ func UpdateEngineer(e Engineer) error {
 	if err != nil {
 		return err
 	}
-	db.Close()
+	defer db.Close()
 
 	_, err = db.Exec(`
 		UPDATE engineer 
@@ -88,7 +88,7 @@ func exist(id int) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	db.Close()
+	defer db.Close()
 
 	rows, err := db.Query(`SELECT id FROM engineer WHERE id = $1`,
 		id,
@@ -113,7 +113,7 @@ func List() ([]Engineer, error) {
 	if err != nil {
 		return nil, err
 	}
-	db.Close()
+	defer db.Close()
 
 	engineers := []Engineer{}
 	rows, err := db.Query(`
@@ -145,7 +145,7 @@ func DeleteEngineer(id int) error {
 	if err != nil {
 		return err
 	}
-	db.Close()
+	defer db.Close()
 
 	_, err = db.Exec(`DELETE FROM engineer WHERE id = $1`, id)
 	if err != nil {
