@@ -49,7 +49,7 @@ func AddEngineer(e Engineer) (int, error) {
 	}
 	defer db.Close()
 
-	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, countr_id, title) VALUES($1, $2, $3, $4, $5)`,
+	result, err := db.Exec(`INSERT INTO engineer(first_name, last_name, gender, country_id, title) VALUES($1, $2, $3, $4, $5)`,
 		e.FirstName, e.LastName, e.Gender, e.ID, e.Title,
 	)
 	if err != nil {
@@ -72,7 +72,7 @@ func UpdateEngineer(e Engineer) error {
 
 	_, err = db.Exec(`
 		UPDATE engineer 
-		SET first_name = $1, last_name = $2, gender = $3, countr_id = $4, title = $5 
+		SET first_name = $1, last_name = $2, gender = $3, country_id = $4, title = $5 
 		WHERE id = $ 6`,
 		e.FirstName, e.LastName, e.Gender, e.ID, e.Title, e.ID,
 	)
